@@ -45,4 +45,47 @@ describe('MoviesService', () => {
       }
     });
   });
+
+  describe('deleteOne', () => {
+    it('deletes a movie', () => {
+      // 처음엔 data가 없으므로 test data를 넣어줌
+      service.create({
+        title: 'Test Movie',
+        genres: ['test'],
+        year: 2020,
+      });
+      // console.log(service.getAll());
+      // const allMovies = service.getAll();
+      const beforDelete = service.getAll().length; // allMovies
+      service.deleteOne(1);
+      // const afterDelete = service.getAll();
+      const afterDelete = service.getAll().length;
+      // expect(afterDelete.length).toEqual(allMovies.length - 1);
+      expect(afterDelete).toBeLessThan(beforDelete);
+    });
+    it('should return a 404', () => {
+      try {
+        service.deleteOne(999);
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
+    });
+  });
+
+  describe('create', () => {
+    it('should create a movie', () => {
+      const beforeCreate = service.getAll().length;
+      service.create({
+        title: 'Test Movie',
+        genres: ['test'],
+        year: 2020,
+      });
+      // 여러가지 테스트를 해볼 수 있음
+      // 얼만큼의 movie가 늘어났는지
+      // 마지막에 생성된 movie의 title이 일치하는지
+      const afterCreate = service.getAll().length;
+      console.log(beforeCreate, afterCreate);
+      expect(afterCreate).toBeGreaterThan(beforeCreate);
+    });
+  });
 });
