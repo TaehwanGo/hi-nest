@@ -6,3 +6,9 @@ export class Movie {
   year: number;
   genres: string[];
 }
+
+// {
+// 	"title": "tony",
+// 	"year": 2020,
+// 	"genres": ["typescript", "nestJS"]
+// }

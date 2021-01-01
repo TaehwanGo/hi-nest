@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Movie } from './entities/movie.entity';
 
 @Injectable()
@@ -11,12 +11,16 @@ export class MoviesService {
 
   getOne(id: string): Movie {
     // console.log(this.movies.find((movie) => movie.id === +id)); // fake DB라서 저장하면 서버가 재시작될때 데이터들이 다 날라감
-    return this.movies.find((movie) => movie.id === +id); // +id == parseInt(id)
+    const movie = this.movies.find((movie) => movie.id === +id); // +id == parseInt(id)
+    if (!movie) {
+      throw new NotFoundException(`Movie with ID: ${id} not found.`); // nest js에서 제공하는 기능 : Error -> ... -> NotFoundException
+    }
+    return movie;
   }
 
-  deleteOne(id: string): boolean {
-    this.movies.filter((movie) => movie.id !== +id);
-    return true;
+  deleteOne(id: string) {
+    this.getOne(id);
+    this.movies = this.movies.filter((movie) => movie.id !== +id);
   }
 
   create(movieData) {
@@ -24,5 +28,11 @@ export class MoviesService {
       id: this.movies.length + 1,
       ...movieData,
     });
+  }
+
+  update(id: string, updateDate) {
+    const movie = this.getOne(id); // id 에러 확인 용
+    this.deleteOne(id);
+    this.movies.push({ ...movie, ...updateDate });
   }
 }
