@@ -42,7 +42,7 @@ describe('AppController (e2e)', () => {
       // 테스팅 DB는 데이터를 생성, 삭제하는 일이 빈번하고 처음엔 [] 임(empty)
     });
 
-    it('POST', () => {
+    it('POST 201', () => {
       return request(app.getHttpServer()) //
         .post('/movies')
         .send({
@@ -51,6 +51,17 @@ describe('AppController (e2e)', () => {
           genres: ['test'],
         })
         .expect(201);
+    });
+    it('POST 400', () => {
+      return request(app.getHttpServer()) //
+        .post('/movies')
+        .send({
+          title: 'Test',
+          year: 2020,
+          genres: ['test'],
+          other: 'thing', // forbidNonWhitelisted가 true 이기 때문에 400을 리턴함
+        })
+        .expect(400);
     });
     it('DELETE', () => {
       return request(app.getHttpServer()) //404가 나오는 것 까지 테스트하는 것을 보여주고 싶었음
@@ -70,7 +81,16 @@ describe('AppController (e2e)', () => {
         .get('/movies/1234') // 위에서 POST요청을 테스트할때 하나 생성된것을 알기 때문에 id를 1로 접근함
         .expect(404);
     });
-    it.todo('DELETE');
-    it.todo('PATCH');
+    it('PATCH 200', () => {
+      return request(app.getHttpServer()) //
+        .patch('/movies/1')
+        .send({ title: 'Updated Test' })
+        .expect(200);
+    });
+    it('DELETE 200', () => {
+      return request(app.getHttpServer()) //
+        .delete('/movies/1')
+        .expect(200);
+    });
   });
 });
