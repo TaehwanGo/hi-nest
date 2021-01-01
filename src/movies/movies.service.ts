@@ -12,6 +12,8 @@ export class MoviesService {
   }
 
   getOne(id: number): Movie {
+    console.log(id);
+    console.log('service getOne, id type:', typeof id);
     // console.log(this.movies.find((movie) => movie.id === +id)); // fake DB라서 저장하면 서버가 재시작될때 데이터들이 다 날라감
     const movie = this.movies.find((movie) => movie.id === id); // +id == parseInt(id)
     if (!movie) {
