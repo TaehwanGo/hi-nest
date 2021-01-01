@@ -15,7 +15,12 @@ import { MoviesService } from './movies.service';
 
 @Controller('movies')
 export class MoviesController {
-  constructor(private readonly moviesService: MoviesService) {}
+  constructor(private readonly moviesService: MoviesService) {
+    // 따로 객체를 생성하지 않고 MoviesService를 파라미터로 전달만 했는데
+    // 클래스 안에서 사용이 가능한 이유는 module에서 import해서 조합해주기 때문
+    // 이것이 dependency injection
+    // 그래서 service파일에 보면 @injectable() 데코레이터가 붙는 이유가 바로 이것 임
+  }
 
   @Get()
   getAll(): Movie[] {
