@@ -4,7 +4,7 @@ import { MoviesService } from './movies.service';
 
 describe('MoviesService', () => {
   let service: MoviesService;
-
+  // beforeEach 처럼 afterEach, beforeAll, afterAll 등 많은 Hook이 존재 함
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [MoviesService],
@@ -86,6 +86,27 @@ describe('MoviesService', () => {
       const afterCreate = service.getAll().length;
       console.log(beforeCreate, afterCreate);
       expect(afterCreate).toBeGreaterThan(beforeCreate);
+    });
+  });
+
+  describe('update', () => {
+    it('should update a movie', () => {
+      service.create({
+        title: 'Test Movie',
+        genres: ['test'],
+        year: 2020,
+      });
+
+      service.update(1, { title: 'Updated Test' });
+      const movie = service.getOne(1);
+      expect(movie.title).toEqual('Updated Test');
+    });
+    it('should throw a NotFoundException', () => {
+      try {
+        service.update(999, {});
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
     });
   });
 });
