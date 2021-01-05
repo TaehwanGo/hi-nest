@@ -34,9 +34,11 @@ export class MoviesService {
     });
   }
 
-  update(id: number, updateDate: UpdateMovieDTO) {
+  update(id: number, updateData: UpdateMovieDTO) {
     const movie = this.getOne(id); // id 에러 확인 용
     this.deleteOne(id);
-    this.movies.push({ ...movie, ...updateDate });
+    console.log({ ...movie });
+    console.log({ ...movie, ...updateData });
+    this.movies.push({ ...movie, ...updateData });
   }
 }
